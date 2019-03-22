@@ -4,6 +4,7 @@ const express = require('express'), //express 框架
 
 var app = express();//实例express框架
 
+//用于处理所有进入 3000 端口 get 的连接请求
 app.get('/',function(req,res){
     //1.获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
     var signature = req.query.signature,//微信加密签名
