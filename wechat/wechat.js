@@ -3,7 +3,7 @@
 const crypto = require('crypto'), //引入加密模块
        https = require('https'), //引入 htts 模块
         util = require('util'), //引入 util 工具包
-accessTokenJson = require('./access_token'); //引入本地存储的 access_token
+accessTokenJson = require('./accessToken'); //引入本地存储的 access_token
 
 
 //构建 WeChat 对象 即 js中 函数就是对象
