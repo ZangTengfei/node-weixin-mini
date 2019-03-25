@@ -7,7 +7,7 @@ var app = express();//实例express框架
 var wechatApp = new wechat(config); //实例wechat 模块
 
 // 托管静态文件
-app.use('/public', express.static('public'));
+app.use(express.static('public'));
 
 //用于处理所有进入 3000 端口 get 的连接请求
 app.get('/',function(req,res){
