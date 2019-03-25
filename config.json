@@ -1,8 +1,8 @@
 {
   "token":"wechat",
-  "appID":"wx895dfa304b6d2fa6",
-  "appScrect":"b17e8cdfd46ae108f3be727427209ee8",
-  "encodingAESKey":"32KYVOnxig70g6HcrKxWAB3kFjgPkDAvRwpAC3xEW0n",
+  "appID":"wx408a3620d2284ac0",
+  "appScrect":"b58c9ed469fdbd39a1f5434053438a8e",
+  "encodingAESKey":"6yymk90U57JAMK2PnY0W4wxlER1lZ5eNnCJ7saRjo5n",
   "apiDomain":"https://api.weixin.qq.com/",
   "apiURL":{
       "accessTokenApi":"%scgi-bin/token?grant_type=client_credential&appid=%s&secret=%s",
