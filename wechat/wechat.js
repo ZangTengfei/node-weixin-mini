@@ -212,10 +212,7 @@ WeChat.prototype.handleMsg = function(req,res){
                     switch(result.Event.toLowerCase()){
                         case 'subscribe':
                             //回复消息
-                            var content = "欢迎关注 hvkcoder 公众号，一起斗图吧。回复以下数字：\n";
-                                content += "1.你是谁\n";
-                                content += "2.关于Node.js\n";
-                                content += "回复 “文章”  可以得到图文推送哦~\n";
+                            var content = "欢迎关注 兆观信息 公众号。";
                             reportMsg = msg.txtMsg(fromUser,toUser,content);
                         break;
                         case 'click':
@@ -233,12 +230,12 @@ WeChat.prototype.handleMsg = function(req,res){
                     if(result.MsgType.toLowerCase() === "text"){
                         //根据消息内容返回消息信息
                         switch(result.Content){
-                            case '1':
-                                reportMsg = msg.txtMsg(fromUser,toUser,'Hello ！我的英文名字叫 H-VK');
-                            break;
-                            case '2':
-                                reportMsg = msg.txtMsg(fromUser,toUser,'Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序');
-                            break;
+                            // case '1':
+                            //     reportMsg = msg.txtMsg(fromUser,toUser,'Hello ！我的英文名字叫 H-VK');
+                            // break;
+                            // case '2':
+                            //     reportMsg = msg.txtMsg(fromUser,toUser,'Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序');
+                            // break;
                             case '文章':
                                 var contentArr = [
                                     {Title:"Node.js 微信自定义菜单",Description:"使用Node.js实现自定义微信菜单",PicUrl:"http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast",Url:"http://wxapi.zangtengfei.com/wx_login"},
