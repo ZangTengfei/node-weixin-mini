@@ -6,6 +6,9 @@ var app = express();//实例express框架
 
 var wechatApp = new wechat(config); //实例wechat 模块
 
+// 托管静态文件
+app.use('/public', express.static('public'));
+
 //用于处理所有进入 3000 端口 get 的连接请求
 app.get('/',function(req,res){
     wechatApp.auth(req,res);
@@ -20,7 +23,17 @@ app.post('/',function(req,res){
 app.get('/getAccessToken',function(req,res){
     wechatApp.getAccessToken().then(function(data){
         res.send(data);
-    });    
+    });
+});
+
+// 用于请求获取userinfo
+app.get('/wx_login',function(req,res){
+    wechatApp.wxLogin(req, res);
+});
+
+
+app.get('/get_wx_access_token', function(req,res, next){
+    wechatApp.getAccessToken(req, res);
 });
 
 //监听3000端口

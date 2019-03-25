@@ -241,7 +241,7 @@ WeChat.prototype.handleMsg = function(req,res){
                             break;
                             case '文章':
                                 var contentArr = [
-                                    {Title:"Node.js 微信自定义菜单",Description:"使用Node.js实现自定义微信菜单",PicUrl:"http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast",Url:"http://blog.csdn.net/hvkcoder/article/details/72868520"},
+                                    {Title:"Node.js 微信自定义菜单",Description:"使用Node.js实现自定义微信菜单",PicUrl:"http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast",Url:"http://wxapi.zangtengfei.com/wx_login"},
                                     {Title:"Node.js access_token的获取、存储及更新",Description:"Node.js access_token的获取、存储及更新",PicUrl:"http://img.blog.csdn.net/20170528151333883?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast",Url:"http://blog.csdn.net/hvkcoder/article/details/72783631"},
                                     {Title:"Node.js 接入微信公众平台开发",Description:"Node.js 接入微信公众平台开发",PicUrl:"http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast",Url:"http://blog.csdn.net/hvkcoder/article/details/72765279"}
                                 ];
@@ -265,6 +265,69 @@ WeChat.prototype.handleMsg = function(req,res){
             }
         });
     });
+}
+
+/**
+ * 获取微信用户信息
+ */
+WeChat.prototype.wxLogin = function(req, res){
+    var that = this;
+
+    var router = 'get_wx_access_token';
+    // 这是编码后的地址
+    var return_uri = 'http%3A%2F%2Fwxapi.zangtengfei.com%2F'+router;  
+    var scope = 'snsapi_userinfo';
+    
+    res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid='+that.appID+'&redirect_uri='+return_uri+'&response_type=code&scope='+scope+'&state=STATE#wechat_redirect');
+}
+
+WeChat.prototype.getWxAccessToken = function(req,res){
+    var that = this;
+
+    var code = req.query.code;
+    request.get(
+        {   
+            url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid='+that.appID+'&secret='+that.appScrect+'&code='+code+'&grant_type=authorization_code',
+        },
+        function(error, response, body){
+            if(response.statusCode == 200){
+                
+                // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
+                //console.log(JSON.parse(body));
+                var data = JSON.parse(body);
+                var access_token = data.access_token;
+                var openid = data.openid;
+                
+                request.get(
+                    {
+                        url:'https://api.weixin.qq.com/sns/userinfo?access_token='+access_token+'&openid='+openid+'&lang=zh_CN',
+                    },
+                    function(error, response, body){
+                        if(response.statusCode == 200){
+                            
+                            // 第四步：根据获取的用户信息进行对应操作
+                            var userinfo = JSON.parse(body);
+                            //console.log(JSON.parse(body));
+                            console.log('获取微信信息成功！');
+                            
+                            // 小测试，实际应用中，可以由此创建一个帐户
+                            res.send("\
+                                <h1>"+userinfo.nickname+" 的个人信息</h1>\
+                                <p><img src='"+userinfo.headimgurl+"' /></p>\
+                                <p>"+userinfo.city+"，"+userinfo.province+"，"+userinfo.country+"</p>\
+                            ");
+                            
+                        }else{
+                            console.log(response.statusCode);
+                        }
+                    }
+                );
+            }else{
+                console.log(response.statusCode);
+            }
+        }
+    );
+
 }
 
 //暴露可供外部访问的接口
