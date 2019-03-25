@@ -9,6 +9,7 @@ accessTokenJson = require('./access_token'), //引入本地存储的 access_toke
       menus  = require('./menus'), //引入微信菜单配置
  parseString = require('xml2js').parseString,//引入xml2js包
          msg = require('./msg'),//引入消息处理模块
+     request = require('request'),
 CryptoGraphy = require('./cryptoGraphy'); //微信消息加解密模块
 
 
@@ -282,6 +283,7 @@ WeChat.prototype.getWxAccessToken = function(req,res){
     var that = this;
 
     var code = req.query.code;
+    console.log(code);
     request.get(
         {   
             url:'https://api.weixin.qq.com/sns/oauth2/access_token?appid='+that.appID+'&secret='+that.appScrect+'&code='+code+'&grant_type=authorization_code',
