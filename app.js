@@ -36,5 +36,6 @@ app.get('/get_wx_access_token', function(req,res, next){
     wechatApp.getWxAccessToken(req, res);
 });
 
+
 //监听3000端口
 app.listen(3000);
