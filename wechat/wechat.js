@@ -368,11 +368,11 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
   var jsapi_ticket = '';
   var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
   that.requestGet(url).then(
-    function (error, response, body) {
+    function (response) {
       if(response) {
-        // console.log(response.body);
+        console.log(response);
         // res.send(response);
-        jsapi_ticket = response.body.ticket;
+        jsapi_ticket = response.ticket;
         var noncestr = Math.random().toString(36).substr(2);
         var timestamp = parseInt((new Date()).valueOf()/1000);
         var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
