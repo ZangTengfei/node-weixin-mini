@@ -372,7 +372,7 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
         if(response) {
           console.log(response);
           // res.send(response);
-          jsapi_ticket = response.ticket&&JSON.parse(response.ticket);
+          jsapi_ticket = response&&JSON.parse(response).ticket;
           var noncestr = Math.random().toString(36).substr(2);
           var timestamp = parseInt((new Date()).valueOf()/1000);
           var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
