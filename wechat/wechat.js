@@ -179,15 +179,13 @@ WeChat.prototype.getAccessToken = function () {
 // /**
 //  * 获取微信 jssdk_ticket
 //  */
-// WeChat.prototype.getAccessToken = function () {
+// WeChat.prototype.getJssdkTicket = function () {
 //   var that = this;
 //   return new Promise(function (resolve, reject) {
 //     //获取当前时间 
 //     var currentTime = new Date().getTime();
-//     //格式化请求地址
-//     var url = util.format(that.apiURL.accessTokenApi, that.apiDomain, that.appID, that.appScrect);
 //     //判断 本地存储的 access_token 是否有效
-//     if (accessTokenJson.access_token === "" || accessTokenJson.expires_time < currentTime) {
+//     if (accessTokenJson.jssdk_ticket === "" || accessTokenJson.expires_time < currentTime) {
 //       that.requestGet(url).then(function (data) {
 //         var result = JSON.parse(data);
 //         if (data.indexOf("errcode") < 0) {
@@ -368,11 +366,8 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
 
   var access_token = accessTokenJson.access_token;
   var jsapi_ticket = '';
-
-  request.get(
-    {
-      url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+'20_JKrrBN6oEe2ApgIQQIdWw-0S6lWlfUrUPTQKu583UD8JfkaVzrt62UKs-1tmpEyXYjv3x6JZt9IzPZx3RNcFrgIW6GPeQtV6QsBB2TFliJSZvL91Vf4H5fM5R1Wbnq7c-_Ff63Q5QxhYuNDlUMBiAHAGYN'+'&type=jsapi'
-    },
+  var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
+  that.requestGet(url).then(
     function (error, response, body) {
       if(response) {
         // console.log(response.body);
