@@ -385,7 +385,7 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
             timestamp: timestamp,
             nonceStr: noncestr,
             signature: signature,
-            jsApiList: ['onMenuShareTimeline'],
+            jsApiList: ['updateAppMessageShareData'],
           });
         }else {
           console.log('获取jsapi_ticket失败');
