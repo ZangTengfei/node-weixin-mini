@@ -379,7 +379,7 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
         const hashCode = crypto.createHash('sha1'); //创建加密类型 
         var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
         res.send({
-          name: 'ztf',
+          response: response,
           ticket: jsapi_ticket||'no_ticket',
           appId: that.appID,
           timestamp: timestamp,
