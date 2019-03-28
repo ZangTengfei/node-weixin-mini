@@ -176,6 +176,39 @@ WeChat.prototype.getAccessToken = function () {
   });
 }
 
+// /**
+//  * 获取微信 jssdk_ticket
+//  */
+// WeChat.prototype.getAccessToken = function () {
+//   var that = this;
+//   return new Promise(function (resolve, reject) {
+//     //获取当前时间 
+//     var currentTime = new Date().getTime();
+//     //格式化请求地址
+//     var url = util.format(that.apiURL.accessTokenApi, that.apiDomain, that.appID, that.appScrect);
+//     //判断 本地存储的 access_token 是否有效
+//     if (accessTokenJson.access_token === "" || accessTokenJson.expires_time < currentTime) {
+//       that.requestGet(url).then(function (data) {
+//         var result = JSON.parse(data);
+//         if (data.indexOf("errcode") < 0) {
+//           accessTokenJson.access_token = result.access_token;
+//           accessTokenJson.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
+//           //更新本地存储的
+//           fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson));
+//           //将获取后的 access_token 返回
+//           resolve(accessTokenJson.access_token);
+//         } else {
+//           //将错误返回
+//           resolve(result);
+//         }
+//       });
+//     } else {
+//       //将本地存储的 access_token 返回
+//       resolve(accessTokenJson.access_token);
+//     }
+//   });
+// }
+
 /**
  * 微信消息处理
  * @param {Request} req Request 对象
@@ -347,7 +380,6 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
         jsapi_ticket = response.ticket;
         var noncestr = Math.random().toString(36).substr(2);
         var timestamp = ((new Date()).valueOf()/1000).toFixed(0);
-        var url = ((new Date()).valueOf()/1000).toFixed(0);
         var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
         const hashCode = crypto.createHash('sha1'); //创建加密类型 
         var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密

@@ -38,25 +38,25 @@ var app = new Vue({
             signature: response.data.signature,// 必填，签名
             jsApiList: ['onMenuShareTimeline'] // 必填，需要使用的JS接口列表
           });
-          wx.checkJsApi({
-            jsApiList: ['onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-            success: function(res) {
-            // 以键值对的形式返回，可用的api值true，不可用为false
-            // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-            }
-          });
-          wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
-            wx.updateAppMessageShareData({ 
-              title: '123', // 分享标题
-              desc: '222', // 分享描述
-              link: 'http://wxapi.zangtengfei.com/user.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
-              imgUrl: 'http://blog-img.zangtengfei.com/wp-content/uploads/2019/03/logo.jpg', // 分享图标
-              success: function () {
-                // 设置成功
-                alert('分享设置成功');
-              }
-            })
-          });
+          // wx.checkJsApi({
+          //   jsApiList: ['onMenuShareTimeline'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
+          //   success: function(res) {
+          //   // 以键值对的形式返回，可用的api值true，不可用为false
+          //   // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
+          //   }
+          // });
+          // wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+          //   wx.updateAppMessageShareData({ 
+          //     title: '123', // 分享标题
+          //     desc: '222', // 分享描述
+          //     link: 'http://wxapi.zangtengfei.com/user.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+          //     imgUrl: 'http://blog-img.zangtengfei.com/wp-content/uploads/2019/03/logo.jpg', // 分享图标
+          //     success: function () {
+          //       // 设置成功
+          //       alert('分享设置成功');
+          //     }
+          //   })
+          // });
         })
         .catch((error)=> {
           console.log(error);
