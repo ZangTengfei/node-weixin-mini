@@ -334,14 +334,16 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
   var that = this;
 
   var access_token = accessTokenJson.access_token;
+  console.log(access_token);
   var jsapi_ticket = '';
 
   request.get(
     {
-      url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + access_token + '&type=jsapi'
+      url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi'
     },
     function (error, response, body) {
-      if(response.errcode == 0) {
+      if(response) {
+        console.log(response);
         jsapi_ticket = response.ticket;
         var noncestr = Math.random().toString(36).substr(2);
         var timestamp = ((new Date()).valueOf()/1000).toFixed(0);
