@@ -372,14 +372,14 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
         if(response) {
           console.log(response);
           // res.send(response);
-          jsapi_ticket = JSON.parse(response.ticket);
+          jsapi_ticket = response.ticket&&JSON.parse(response.ticket);
           var noncestr = Math.random().toString(36).substr(2);
           var timestamp = parseInt((new Date()).valueOf()/1000);
           var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
           const hashCode = crypto.createHash('sha1'); //创建加密类型 
           var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
           res.send({
-            response: JSON.parse(response),
+            response: response,
             ticket: jsapi_ticket||'no_ticket',
             appId: that.appID,
             timestamp: timestamp,
