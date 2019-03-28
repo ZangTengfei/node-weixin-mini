@@ -330,5 +330,36 @@ WeChat.prototype.getWxAccessToken = function (req, res) {
 
 }
 
+WeChat.prototype.getWxJssdkConfig = function (req, res) {
+  var that = this;
+
+  var access_token = accessTokenJson.access_token;
+  var jsapi_ticket = '';
+
+  request.get(
+    {
+      url: 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=' + access_token + '&type=jsapi'
+    },
+    function (error, response, body) {
+      if(response.errcode == 0) {
+        jsapi_ticket = response.ticket;
+        var noncestr = Math.random().toString(36).substr(2);
+        var timestamp = ((new Date()).valueOf()/1000).toFixed(0);
+        var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://mp.weixin.qq.com?params=value';
+        const hashCode = crypto.createHash('sha1'); //创建加密类型 
+        var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
+        res.send({
+          appId: that.appID,
+          timestamp: timestamp,
+          nonceStr: noncestr,
+          signature: signature,
+          jsApiList: ['onMenuShareTimeline'],
+        });
+      }else {
+        console.log('获取jsapi_ticket失败');
+      }
+    });
+}
+
 //暴露可供外部访问的接口
 module.exports = WeChat;
