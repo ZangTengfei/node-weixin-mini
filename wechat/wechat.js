@@ -375,7 +375,6 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
     },
     function (error, response, body) {
       if(response) {
-        console.log(response);
         jsapi_ticket = response.ticket;
         var noncestr = Math.random().toString(36).substr(2);
         var timestamp = parseInt((new Date()).valueOf()/1000);
