@@ -186,8 +186,6 @@ WeChat.prototype.getJssdkTicket = function () {
     //获取当前时间 
     var currentTime = new Date().getTime();
     that.getAccessToken().then(function(data) {
-      // var access_token = data;
-      // var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
       var url = util.format(that.apiURL.jssdkTicketApi, that.apiDomain, data);
       //判断 本地存储的 access_token 是否有效
       if (jsapiTicketJson.jssdk_ticket === "" || jsapiTicketJson.expires_time < currentTime) {
@@ -324,20 +322,17 @@ WeChat.prototype.getWxAccessToken = function (req, res) {
   var url = util.format(that.apiURL.webAccessTokenApi, that.apiDomain, that.appID, that.appScrect, code);
   request.get(
     {
-      // url: 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' + that.appID + '&secret=' + that.appScrect + '&code=' + code + '&grant_type=authorization_code',
       url: url
     },
     function (error, response, body) {
       if (response.statusCode == 200) {
         // 第三步：拉取用户信息(需scope为 snsapi_userinfo)
-        //console.log(JSON.parse(body));
         var data = JSON.parse(body);
         var access_token = data.access_token;
         var openid = data.openid;
         var url = util.format(that.apiURL.getUserInfoApi, that.apiDomain, access_token, openid);
         request.get(
           {
-            // url: 'https://api.weixin.qq.com/sns/userinfo?access_token=' + access_token + '&openid=' + openid + '&lang=zh_CN',
             url: url
           },
           function (error, response, body) {
@@ -355,7 +350,6 @@ WeChat.prototype.getWxAccessToken = function (req, res) {
       }
     }
   );
-
 }
 
 /**

@@ -11,7 +11,7 @@
   <div id="app">
     <h2>用户信息</h2>
     <div>
-      {{config}}
+      {{userInfo}}
     </div>
   </div>
 </body>
@@ -23,7 +23,8 @@
 var app = new Vue({
   el: '#app',
   data: {
-    config: {}
+    config: {},
+    userInfo: {}
   },
   methods: {
     getConfig() {
@@ -65,9 +66,24 @@ var app = new Vue({
           console.log(error);
         });
     },
+    getUserInfo() {
+      // var redirect_uri = 'http%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html';
+
+      var str = window.location.href;
+      var code = str.match(/code=(\S*)&/)&&str.match(/code=(\S*)&/)[1];
+      if(code) {
+        var url = 'http://wxapi.zangtengfei.com/get_wx_jssdk_config?code='+code;
+        axios.get(url).then(data => {
+          this.userInfo = data;
+        });
+      } else {
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=https%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html&response_type=code&scope=snsapi_userinfo';
+      }
+    }
   },
   mounted() {
     this.getConfig();
+    this.getUserInfo();
   }
 })
 </script>
