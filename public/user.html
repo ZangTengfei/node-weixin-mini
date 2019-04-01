@@ -11,7 +11,9 @@
   <div id="app">
     <h2>用户信息</h2>
     <div>
-      {{userInfo}}
+      <img :src="userInfo.headimgurl">
+      <h2>{{ userInfo.nickname }}</h2>
+      <p>{{userInfo.country}} {{userInfo.province}} {{userInfo.city}}</p>
     </div>
   </div>
 </body>
@@ -74,8 +76,8 @@ var app = new Vue({
       if(code) {
         console.log(code);
         var url = 'http://wxapi.zangtengfei.com/get_wx_access_token?code='+code;
-        axios.get(url).then(data => {
-          this.userInfo = data;
+        axios.get(url).then(result => {
+          this.userInfo = result.data;
         });
       } else {
         window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html&response_type=code&scope=snsapi_userinfo';
