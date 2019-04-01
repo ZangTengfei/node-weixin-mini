@@ -73,7 +73,7 @@ var app = new Vue({
       var code = str.match(/code=(\S*)&/)&&str.match(/code=(\S*)&/)[1];
       if(code) {
         console.log(code);
-        var url = 'http://wxapi.zangtengfei.com/get_wx_jssdk_config?code='+code;
+        var url = 'http://wxapi.zangtengfei.com/get_wx_access_token?code='+code;
         axios.get(url).then(data => {
           this.userInfo = data;
         });
