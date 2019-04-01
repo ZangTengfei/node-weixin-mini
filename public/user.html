@@ -72,12 +72,13 @@ var app = new Vue({
       var str = window.location.href;
       var code = str.match(/code=(\S*)&/)&&str.match(/code=(\S*)&/)[1];
       if(code) {
+        console.log(code);
         var url = 'http://wxapi.zangtengfei.com/get_wx_jssdk_config?code='+code;
         axios.get(url).then(data => {
           this.userInfo = data;
         });
       } else {
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=https%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html&response_type=code&scope=snsapi_userinfo';
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html&response_type=code&scope=snsapi_userinfo';
       }
     }
   },
