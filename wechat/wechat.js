@@ -6,6 +6,7 @@ const crypto = require('crypto'), //引入加密模块
   fs = require('fs'), //引入 fs 模块
   urltil = require('url'),//引入 url 模块
   accessTokenJson = require('./access_token'), //引入本地存储的 access_token
+  jsapiTicketJson = require('./jsapi_ticket'), //引入本地存储的 jsapi_ticket
   menus = require('./menus'), //引入微信菜单配置
   parseString = require('xml2js').parseString,//引入xml2js包
   msg = require('./msg'),//引入消息处理模块
@@ -176,36 +177,40 @@ WeChat.prototype.getAccessToken = function () {
   });
 }
 
-// /**
-//  * 获取微信 jssdk_ticket
-//  */
-// WeChat.prototype.getJssdkTicket = function () {
-//   var that = this;
-//   return new Promise(function (resolve, reject) {
-//     //获取当前时间 
-//     var currentTime = new Date().getTime();
-//     //判断 本地存储的 access_token 是否有效
-//     if (accessTokenJson.jssdk_ticket === "" || accessTokenJson.expires_time < currentTime) {
-//       that.requestGet(url).then(function (data) {
-//         var result = JSON.parse(data);
-//         if (data.indexOf("errcode") < 0) {
-//           accessTokenJson.access_token = result.access_token;
-//           accessTokenJson.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
-//           //更新本地存储的
-//           fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson));
-//           //将获取后的 access_token 返回
-//           resolve(accessTokenJson.access_token);
-//         } else {
-//           //将错误返回
-//           resolve(result);
-//         }
-//       });
-//     } else {
-//       //将本地存储的 access_token 返回
-//       resolve(accessTokenJson.access_token);
-//     }
-//   });
-// }
+/**
+ * 获取微信 jssdk_ticket
+ */
+WeChat.prototype.getJssdkTicket = function () {
+  var that = this;
+  return new Promise(function (resolve, reject) {
+    //获取当前时间 
+    var currentTime = new Date().getTime();
+    that.getAccessToken().then(function(data) {
+      var access_token = data;
+      var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
+      //判断 本地存储的 access_token 是否有效
+      if (jsapiTicketJson.jssdk_ticket === "" || jsapiTicketJson.expires_time < currentTime) {
+        that.requestGet(url).then(function (data) {
+          var result = JSON.parse(data);
+          if (data.indexOf("errcode") < 0) {
+            jsapiTicketJson.jssdk_ticket = result.jssdk_ticket;
+            jsapiTicketJson.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
+            //更新本地存储的
+            fs.writeFile('./wechat/jsapi_ticket.json', JSON.stringify(jsapiTicketJson));
+            //将获取后的 access_token 返回
+            resolve(jsapiTicketJson.jssdk_ticket);
+          } else {
+            //将错误返回
+            resolve(result);
+          }
+        });
+      } else {
+        //将本地存储的 access_token 返回
+        resolve(accessTokenJson.access_token);
+      }
+    });
+  });
+}
 
 /**
  * 微信消息处理
@@ -361,36 +366,59 @@ WeChat.prototype.getWxAccessToken = function (req, res) {
 
 }
 
+// WeChat.prototype.getWxJssdkConfig = function (req, res) {
+//   var that = this;
+//   this.getAccessToken().then(function (data) {
+//     var access_token = data;
+//     var jsapi_ticket = '';
+//     var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
+//     that.requestGet(url).then(
+//       function (response) {
+//         if(response) {
+//           jsapi_ticket = response&&JSON.parse(response).ticket;
+//           var noncestr = Math.random().toString(36).substr(2);
+//           var timestamp = parseInt((new Date()).valueOf()/1000);
+//           var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
+//           const hashCode = crypto.createHash('sha1'); //创建加密类型 
+//           var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
+//           res.send({
+//             // response: response,
+//             // ticket: jsapi_ticket||'no_ticket',
+//             appId: that.appID,
+//             timestamp: timestamp,
+//             nonceStr: noncestr,
+//             signature: signature,
+//             jsApiList: ['updateAppMessageShareData','updateTimelineShareData'],
+//           });
+//         }else {
+//           console.log('获取jsapi_ticket失败');
+//         }
+//       });
+//   });
+// }
+
 WeChat.prototype.getWxJssdkConfig = function (req, res) {
   var that = this;
-  this.getAccessToken().then(function (data) {
-    var access_token = data;
-    var jsapi_ticket = '';
-    var url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token='+access_token+'&type=jsapi';
-    that.requestGet(url).then(
-      function (response) {
-        if(response) {
-          console.log(response);
-          // res.send(response);
-          jsapi_ticket = response&&JSON.parse(response).ticket;
-          var noncestr = Math.random().toString(36).substr(2);
-          var timestamp = parseInt((new Date()).valueOf()/1000);
-          var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
-          const hashCode = crypto.createHash('sha1'); //创建加密类型 
-          var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
-          res.send({
-            response: response,
-            ticket: jsapi_ticket||'no_ticket',
-            appId: that.appID,
-            timestamp: timestamp,
-            nonceStr: noncestr,
-            signature: signature,
-            jsApiList: ['updateAppMessageShareData','updateTimelineShareData'],
-          });
-        }else {
-          console.log('获取jsapi_ticket失败');
-        }
+  this.getJssdkTicket().then(function (data) {
+    if(data.errmsg == 'ok') {
+      var jsapi_ticket = data.ticket;
+      var noncestr = Math.random().toString(36).substr(2);
+      var timestamp = parseInt((new Date()).valueOf()/1000);
+      var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url=http://wxapi.zangtengfei.com/user.html';
+      const hashCode = crypto.createHash('sha1'); //创建加密类型 
+      var signature = hashCode.update(str, 'utf8').digest('hex'); //对传入的字符串进行加密
+      res.send({
+        // response: response,
+        // ticket: jsapi_ticket||'no_ticket',
+        appId: that.appID,
+        timestamp: timestamp,
+        nonceStr: noncestr,
+        signature: signature,
+        jsApiList: ['updateAppMessageShareData','updateTimelineShareData'],
       });
+    }else {
+      console.log('获取jsapi_ticket失败');
+    }
   });
 }
 
