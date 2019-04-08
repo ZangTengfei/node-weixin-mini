@@ -1,67 +1,12 @@
 {
   "button": [
     {
-      "name": "产品介绍",
+      "name": "用户",
       "sub_button": [
         {
           "type": "view",
-          "name": "睡眠初筛",
-          "url": "https://mp.weixin.qq.com/s/SCBl1gO5_1ukWH0C5O0MMw"
-        },
-        {
-          "type": "view",
-          "name": "睡眠监护",
-          "url": "https://mp.weixin.qq.com/s?__biz=MzAwODY5MzU0Ng==&mid=2649407895&idx=3&sn=ef616a3f7901e607da78e95b7c507807&chksm=837493d2b4031ac4e37df0d28412f3daf6a89550cb07e3450878facdad6dd79f0dd99f2896a7&token=486206845&lang=zh_CN#rd"
-        },
-        {
-          "type": "view",
-          "name": "血氧戒指",
-          "url": "https://mp.weixin.qq.com/s/hIhaYG-IjR6fd4NorqNuqw"
-        },
-        {
-          "type": "view",
-          "name": "操作指引",
-          "url": "https://mp.weixin.qq.com/s/N1i3VEIS3IXk5NEt95F4Ug"
-        }
-      ]
-    },
-    {
-      "name": "智慧养老",
-      "sub_button": [
-        {
-          "type":"text",
-          "name":"联系方式",
-          "content": "上海兆观信息科技有限公司 400电话：400-806-2265 上海电话：021-64782008 杭州电话：0571-28187980 官网：http://www.megahealth.cn 地址：上海市闵行区万源路2158号弘毅大厦915室 邮编：201100"
-        },
-        {
-          "type": "view",
-          "name": "养老监护个人版",
-          "url": "wxapp://wxf4fa9b179dfd7bca/pages/login/login|https://care.megahealth.cn/update.html"
-        },
-        {
-          "type": "view",
-          "name": "养老监护机构版",
-          "url": "wxapp://wx6536635b4392ec51/pages/ylweb/ylweb|https://care.megahealth.cn/update.html"
-        }
-      ]
-    },
-    {
-      "name": "APP下载",
-      "sub_button": [
-        {
-          "type": "view",
-          "name": "兆观健康",
-          "url": "https://a.app.qq.com/o/simple.jsp?pkgname=com.zhaoguan.ring"
-        },
-        {
-          "type": "view",
-          "name": "监护配置",
-          "url": "https://mp.weixin.qq.com/s?__biz=MzAwODY5MzU0Ng==&mid=2649408175&idx=1&sn=1d55906e5f869b9195f834aa64312a28&chksm=837490eab40319fc6d4fe2ecb5a3ead7110c83afb2bcee8c812bc9efe57fe3e13894e3f0afd6&token=1022966466&lang=zh_CN#rd"
-        },
-        {
-          "type": "view",
-          "name": "购买",
-          "url": "https://yinxingshu.megahealth.cn"
+          "name": "用户信息",
+          "url": "http://279b519f.ngrok.io/user.html"
         }
       ]
     }

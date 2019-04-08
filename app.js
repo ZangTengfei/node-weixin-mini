@@ -40,6 +40,10 @@ app.get('/get_wx_jssdk_config', function (req, res, next) {
   wechatApp.getWxJssdkConfig(req, res);
 });
 
+app.get('/send_tpl_msg', function (req, res, next) {
+  wechatApp.sendTplMsg(req, res);
+});
+
 
 //监听3000端口
 app.listen(3000);

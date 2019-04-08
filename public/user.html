@@ -14,6 +14,7 @@
       <img :src="userInfo.headimgurl">
       <h2>{{ userInfo.nickname }}</h2>
       <p>{{userInfo.country}} {{userInfo.province}} {{userInfo.city}}</p>
+      <button @click="sendTplMsg">发送模板消息</button>
     </div>
   </div>
 </body>
@@ -25,12 +26,14 @@
 var app = new Vue({
   el: '#app',
   data: {
+    apiDomain: 'http://279b519f.ngrok.io/',
     config: {},
     userInfo: {}
   },
   methods: {
     getConfig() {
-      axios.get('http://wxapi.zangtengfei.com/get_wx_jssdk_config')
+      var url = this.apiDomain + 'get_wx_jssdk_config';
+      axios.get(url)
         .then(response=> {
           this.config = response.data
           wx.config({
@@ -42,10 +45,11 @@ var app = new Vue({
             jsApiList: ['updateAppMessageShareData','updateTimelineShareData'] // 必填，需要使用的JS接口列表
           });
           wx.ready(function () {   //需在用户可能点击分享按钮前就先调用
+            var url = this.apiDomain + 'user.html';
             wx.updateAppMessageShareData({ 
               title: '123', // 分享标题
               desc: '222', // 分享描述
-              link: 'http://wxapi.zangtengfei.com/user.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: 'http://blog-img.zangtengfei.com/wp-content/uploads/2019/03/logo.jpg', // 分享图标
               success: function () {
                 // 设置成功
@@ -55,7 +59,7 @@ var app = new Vue({
             wx.updateTimelineShareData({ 
               title: '123', // 分享标题
               desc: '222', // 分享描述
-              link: 'http://wxapi.zangtengfei.com/user.html', // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
+              link: url, // 分享链接，该链接域名或路径必须与当前页面对应的公众号JS安全域名一致
               imgUrl: 'http://blog-img.zangtengfei.com/wp-content/uploads/2019/03/logo.jpg', // 分享图标
               success: function () {
                 // 设置成功
@@ -69,19 +73,25 @@ var app = new Vue({
         });
     },
     getUserInfo() {
-      // var redirect_uri = 'http%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html';
-
       var str = window.location.href;
       var code = str.match(/code=(\S*)&/)&&str.match(/code=(\S*)&/)[1];
       if(code) {
         console.log(code);
-        var url = 'http://wxapi.zangtengfei.com/get_wx_access_token?code='+code;
+        var url = this.apiDomain+'get_wx_access_token?code='+code;
         axios.get(url).then(result => {
           this.userInfo = result.data;
         });
       } else {
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2Fwxapi.zangtengfei.com%2Fuser.html&response_type=code&scope=snsapi_userinfo';
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2F279b519f.ngrok.io%2Fuser.html&response_type=code&scope=snsapi_userinfo';
       }
+    },
+    sendTplMsg() {
+      var username = this.userInfo.nickname;
+      var openid = this.userInfo.openid;
+      var url = this.apiDomain+'send_tpl_msg?username='+username+'&openid='+openid;
+      axios.get(url).then(result=> {
+        console.log('发送成功');
+      });
     }
   },
   mounted() {

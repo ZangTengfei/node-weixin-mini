@@ -10,6 +10,7 @@
       "getCodeApi":"%sconnect/oauth2/authorize?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=STATE#wechat_redirect",
       "webAccessTokenApi":"%ssns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
       "getUserInfoApi":"%ssns/userinfo?access_token=%s&openid=%s&lang=zh_CN",
-      "createMenu":"%scgi-bin/menu/create?access_token=%s"
+      "createMenu":"%scgi-bin/menu/create?access_token=%s",
+      "sendTplMsg":"%scgi-bin/message/template/send?access_token=%s"
   }
 }

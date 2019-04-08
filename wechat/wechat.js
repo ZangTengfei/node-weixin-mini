@@ -248,7 +248,7 @@ WeChat.prototype.handleMsg = function (req, res) {
           switch (result.Event.toLowerCase()) {
             case 'subscribe':
               //回复消息
-              var content = "欢迎关注 兆观信息 公众号。";
+              var content = "欢迎关注 ztf 公众号。";
               reportMsg = msg.txtMsg(fromUser, toUser, content);
               break;
             case 'click':
@@ -274,7 +274,7 @@ WeChat.prototype.handleMsg = function (req, res) {
               // break;
               case '文章':
                 var contentArr = [
-                  { Title: "Node.js 微信自定义菜单", Description: "使用Node.js实现自定义微信菜单", PicUrl: "http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://wxapi.zangtengfei.com/wx_login" },
+                  { Title: "Node.js 微信自定义菜单", Description: "使用Node.js实现自定义微信菜单", PicUrl: "http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72783631" },
                   { Title: "Node.js access_token的获取、存储及更新", Description: "Node.js access_token的获取、存储及更新", PicUrl: "http://img.blog.csdn.net/20170528151333883?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72783631" },
                   { Title: "Node.js 接入微信公众平台开发", Description: "Node.js 接入微信公众平台开发", PicUrl: "http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72765279" }
                 ];
@@ -306,7 +306,7 @@ WeChat.prototype.handleMsg = function (req, res) {
 WeChat.prototype.wxLogin = function (req, res) {
   var that = this;
   var router = 'get_wx_access_token';
-  var return_uri = 'http%3A%2F%2Fwxapi.zangtengfei.com%2F' + router;
+  var return_uri = 'http%3A%2F%2F279b519f.ngrok.io%2F' + router;
   var scope = 'snsapi_userinfo';
   var url = util.format(that.apiURL.getCodeApi, that.apiDomain, that.appID, return_uri, scope);
   res.redirect(url);
@@ -362,7 +362,7 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
       var jsapi_ticket = data.ticket;
       var noncestr = Math.random().toString(36).substr(2);
       var timestamp = parseInt((new Date()).valueOf()/1000);
-      var url = 'http://wxapi.zangtengfei.com/user.html';
+      var url = 'http://279b519f.ngrok.io/user.html';
       var str = 'jsapi_ticket='+jsapi_ticket+'&noncestr='+noncestr+'&timestamp='+timestamp+'&url='+url;
       const hashCode = crypto.createHash('sha1');
       var signature = hashCode.update(str, 'utf8').digest('hex');
@@ -376,6 +376,35 @@ WeChat.prototype.getWxJssdkConfig = function (req, res) {
     }else {
       console.log('获取jsapi_ticket失败');
     }
+  });
+}
+
+WeChat.prototype.sendTplMsg = function (req, res) {
+  var that = this;
+  var username = req.query.username;
+  var openid = req.query.openid;
+  this.getAccessToken().then(function (data) {
+    var requestData =  {
+      "touser": openid,
+      "template_id":"G8u7M-55MKsEr5knxFdzb1uZhioRhSID2tPq60y4eNA",         
+      "data":{
+        "username": {
+          "value": username,
+          "color":"#173177"
+        },
+        "leaveTime":{
+          "value": 5,
+          "color":"#ff0000"
+        }
+      }
+    }
+    //格式化请求连接
+    var url = util.format(that.apiURL.sendTplMsg, that.apiDomain, data);
+    //使用 Post 请求创建微信菜单
+    that.requestPost(url, JSON.stringify(requestData)).then(function (data) {
+      //将结果打印
+      console.log(data);
+    });
   });
 }
 
