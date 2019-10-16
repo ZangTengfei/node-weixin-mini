@@ -77,3 +77,6 @@
 
     ![微信接收事件消息](http://img.blog.csdn.net/20170608160434723?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
 
+
+  <!-- "appID":"wx25a60e1151bb48c4", -->
+  // "appScrect":"0f903f446ab406882ec5b9a88e7f476c",

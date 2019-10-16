@@ -1,6 +1,7 @@
 'use strict' //设置为严格模式
 
 const crypto = require('crypto'), //引入加密模块
+      axios = require('axios'),
   https = require('https'), //引入 htts 模块
   util = require('util'), //引入 util 工具包
   fs = require('fs'), //引入 fs 模块
@@ -162,7 +163,7 @@ WeChat.prototype.getAccessToken = function () {
           accessTokenJson.access_token = result.access_token;
           accessTokenJson.expires_time = new Date().getTime() + (parseInt(result.expires_in) - 200) * 1000;
           //更新本地存储的
-          fs.writeFile('./wechat/access_token.json', JSON.stringify(accessTokenJson));
+          fs.writeFileSync('./wechat/access_token.json', JSON.stringify(accessTokenJson));
           //将获取后的 access_token 返回
           resolve(accessTokenJson.access_token);
         } else {
@@ -266,12 +267,12 @@ WeChat.prototype.handleMsg = function (req, res) {
           if (result.MsgType.toLowerCase() === "text") {
             //根据消息内容返回消息信息
             switch (result.Content) {
-              // case '1':
-              //     reportMsg = msg.txtMsg(fromUser,toUser,'Hello ！我的英文名字叫 H-VK');
-              // break;
-              // case '2':
-              //     reportMsg = msg.txtMsg(fromUser,toUser,'Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序');
-              // break;
+              case '1':
+                  reportMsg = msg.txtMsg(fromUser,toUser,'Hello ！我的英文名字叫 H-VK');
+              break;
+              case '2':
+                  reportMsg = msg.txtMsg(fromUser,toUser,'Node.js是一个开放源代码、跨平台的JavaScript语言运行环境，采用Google开发的V8运行代码,使用事件驱动、非阻塞和异步输入输出模型等技术来提高性能，可优化应用程序的传输量和规模。这些技术通常用于数据密集的事实应用程序');
+              break;
               case '文章':
                 var contentArr = [
                   { Title: "Node.js 微信自定义菜单", Description: "使用Node.js实现自定义微信菜单", PicUrl: "http://img.blog.csdn.net/20170605162832842?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvaHZrQ29kZXI=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast", Url: "http://blog.csdn.net/hvkcoder/article/details/72783631" },
@@ -304,13 +305,95 @@ WeChat.prototype.handleMsg = function (req, res) {
  * 获取微信用户信息 code
  */
 WeChat.prototype.wxLogin = function (req, res) {
-  var that = this;
-  var router = 'get_wx_access_token';
-  var return_uri = 'http%3A%2F%2F279b519f.ngrok.io%2F' + router;
-  var scope = 'snsapi_userinfo';
-  var url = util.format(that.apiURL.getCodeApi, that.apiDomain, that.appID, return_uri, scope);
-  res.redirect(url);
+  // var that = this;
+  // var router = 'get_wx_access_token';
+  // var return_uri = 'http%3A%2F%2F801b5b30.ngrok.io%2F' + router;
+  // var scope = 'snsapi_userinfo';
+  // var url = util.format(that.apiURL.getCodeApi, that.apiDomain, that.appID, return_uri, scope);
+  // res.redirect(url);
   // res.redirect('https://open.weixin.qq.com/connect/oauth2/authorize?appid=' + that.appID + '&redirect_uri=' + return_uri + '&response_type=code&scope=' + scope + '&state=STATE#wechat_redirect');
+  var that = this;
+  var code = req.query.code;
+  var url = util.format(that.apiURL.code2Session, that.apiDomain, that.appID, that.appScrect, code);
+  axios.get(url).then(function(r) {
+    console.log(r.data);
+    res.send(r.data);
+  }, function(err) {
+    console.log(err);
+    res.send('err');
+    
+  })
+}
+
+WeChat.prototype.sendMessage = function (req, res) {
+  var that = this;
+const hasBody = function(req) {
+	return  'transfer-encoding'  in  req.headers  ||  'content-length' in req.headers;
+};
+
+const mime = function (req) {
+  const str = req.headers['content-type'] || '';
+  return str.split(';')[0];
+};
+  const isJson = mime(req) === 'application/json'
+  if (hasBody(req) && isJson) {
+    var buffers = [];
+    req.on('data', function (chunk) {
+      buffers.push(chunk);
+    });
+    req.on('end', function () {
+      let requestBody = Buffer.concat(buffers).toString();
+      try {
+        requestBody = JSON.parse(requestBody);
+        
+        
+          
+          var openid = requestBody.openid;
+          var template_id = requestBody.template_id;
+
+
+          that.getAccessToken().then(function (data) {
+            var requestData =  {
+              "touser": openid,
+              "template_id": template_id,         
+              "data": {
+                "thing1": {
+                    "value": "高数"
+                },
+                "time5": {
+                    "value": "10:00"
+                },
+                "thing6": {
+                    "value": "二教-2201"
+                } ,
+                "thing7": {
+                    "value": "微积分"
+                }
+              }
+            }
+
+            var url = util.format(that.apiURL.sendMsg, that.apiDomain, data);
+            axios.post(url, requestData).then(function(r) {
+              console.log(r.data);
+              res.send(r.data)
+            }, function(err) {
+              console.log(err);
+              res.send(err)
+            })
+          }, function(err) {
+            console.log(err);
+            res.send(err)
+          });
+
+
+      } catch (error) {
+        console.log(error)
+      }
+    });
+  }
+
+  
+
 }
 
 /**

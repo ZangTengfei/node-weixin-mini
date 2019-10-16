@@ -26,7 +26,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    apiDomain: 'http://279b519f.ngrok.io/',
+    apiDomain: 'http://801b5b30.ngrok.io/',
     config: {},
     userInfo: {}
   },
@@ -82,7 +82,7 @@ var app = new Vue({
           this.userInfo = result.data;
         });
       } else {
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2F279b519f.ngrok.io%2Fuser.html&response_type=code&scope=snsapi_userinfo';
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2F801b5b30.ngrok.io%2Fuser.html&response_type=code&scope=snsapi_userinfo';
       }
     },
     sendTplMsg() {

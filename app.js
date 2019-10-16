@@ -21,6 +21,7 @@ app.post('/', function (req, res) {
 
 //用于请求获取 access_token
 app.get('/getAccessToken', function (req, res) {
+  console.log('getAccessToken');
   wechatApp.getAccessToken().then(function (data) {
     res.send(data);
   });
@@ -28,7 +29,18 @@ app.get('/getAccessToken', function (req, res) {
 
 // 用于请求获取userinfo
 app.get('/wx_login', function (req, res) {
+  console.log('wx_login');
   wechatApp.wxLogin(req, res);
+});
+
+app.get('/onLogin', function (req, res) {
+  console.log('onLogin');
+  wechatApp.wxLogin(req, res);
+});
+
+app.post('/send_message', function (req, res) {
+  console.log('send_message');
+  wechatApp.sendMessage(req, res);
 });
 
 
@@ -46,4 +58,4 @@ app.get('/send_tpl_msg', function (req, res, next) {
 
 
 //监听3000端口
-app.listen(3000);
+app.listen(3200);
