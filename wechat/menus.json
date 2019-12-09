@@ -1,12 +1,74 @@
 {
   "button": [
     {
-      "name": "用户",
+      "name": "产品介绍",
       "sub_button": [
         {
           "type": "view",
-          "name": "用户信息",
-          "url": "http://279b519f.ngrok.io/user.html"
+          "name": "睡眠初筛",
+          "url": "https://mp.weixin.qq.com/s/yl-GtZb0vwk46igMex7j3g"
+        },
+        {
+          "type": "view",
+          "name": "睡眠监护",
+          "url": "https://mp.weixin.qq.com/s/jFzGAD3cwEQJuHY4czXZtg"
+        },
+        {
+          "type": "view",
+          "name": "血氧戒指",
+          "url": "https://mp.weixin.qq.com/s/hIhaYG-IjR6fd4NorqNuqw"
+        },
+        {
+          "type": "view",
+          "name": "操作指引",
+          "url": "https://mp.weixin.qq.com/s/N1i3VEIS3IXk5NEt95F4Ug"
+        }
+      ]
+    },
+    {
+      "name": "智慧养老",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "关于兆观",
+          "url": "https://megahealth.cn"
+        },
+        {
+          "type": "miniprogram", 
+          "name": "养老监护个人版", 
+          "url": "http://mp.weixin.qq.com", 
+          "appid": "wxf4fa9b179dfd7bca"
+        },
+        {
+          "type": "miniprogram", 
+          "name": "养老监护机构版", 
+          "url": "http://mp.weixin.qq.com", 
+          "appid": "wx6536635b4392ec51"
+        }
+      ]
+    },
+    {
+      "name": "更多精彩",
+      "sub_button": [
+        {
+          "type": "view",
+          "name": "APP下载",
+          "url": "https://a.app.qq.com/o/simple.jsp?pkgname=com.zhaoguan.ring"
+        },
+        {
+          "type": "view",
+          "name": "使用指南",
+          "url": "http://m.weixinyunduan.com.cn/gzzh/artview-1.html?wid=504768&rid=986685"
+        },
+        {
+          "type": "click",
+          "name": "联系我们",
+          "key": "联系我们"
+        },
+        {
+          "type": "view",
+          "name": "购买",
+          "url": "https://yinxingshu.megahealth.cn"
         }
       ]
     }

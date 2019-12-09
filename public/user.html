@@ -26,7 +26,7 @@
 var app = new Vue({
   el: '#app',
   data: {
-    apiDomain: 'http://801b5b30.ngrok.io/',
+    apiDomain: 'https://wx.megahealth.cn/',
     config: {},
     userInfo: {}
   },
@@ -80,9 +80,10 @@ var app = new Vue({
         var url = this.apiDomain+'get_wx_access_token?code='+code;
         axios.get(url).then(result => {
           this.userInfo = result.data;
+          console.log(this.userInfo.openid);
         });
       } else {
-        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx25a60e1151bb48c4&redirect_uri=http%3A%2F%2F801b5b30.ngrok.io%2Fuser.html&response_type=code&scope=snsapi_userinfo';
+        window.location.href = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx408a3620d2284ac0&redirect_uri=https%3A%2F%2Fwx.megahealth.cn%2Fuser.html&response_type=code&scope=snsapi_userinfo';
       }
     },
     sendTplMsg() {
