@@ -43,6 +43,11 @@ app.post('/send_message', function (req, res) {
   wechatApp.sendMessage(req, res);
 });
 
+app.post('/db_query', function (req, res) {
+  console.log('db_query');
+  wechatApp.databaseQuery(req, res);
+});
+
 
 app.get('/get_wx_access_token', function (req, res, next) {
   wechatApp.getWxAccessToken(req, res);

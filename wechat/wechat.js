@@ -328,14 +328,14 @@ WeChat.prototype.wxLogin = function (req, res) {
 
 WeChat.prototype.sendMessage = function (req, res) {
   var that = this;
-const hasBody = function(req) {
-	return  'transfer-encoding'  in  req.headers  ||  'content-length' in req.headers;
-};
+  const hasBody = function(req) {
+    return  'transfer-encoding'  in  req.headers  ||  'content-length' in req.headers;
+  };
 
-const mime = function (req) {
-  const str = req.headers['content-type'] || '';
-  return str.split(';')[0];
-};
+  const mime = function (req) {
+    const str = req.headers['content-type'] || '';
+    return str.split(';')[0];
+  };
   const isJson = mime(req) === 'application/json'
   if (hasBody(req) && isJson) {
     var buffers = [];
@@ -490,6 +490,59 @@ WeChat.prototype.sendTplMsg = function (req, res) {
       console.log(data);
     });
   });
+}
+
+WeChat.prototype.databaseQuery = function (req, res) {
+  var that = this;
+  const hasBody = function(req) {
+    return  'transfer-encoding'  in  req.headers  ||  'content-length' in req.headers;
+  };
+  const mime = function (req) {
+    const str = req.headers['content-type'] || '';
+    return str.split(';')[0];
+  };
+  const isJson = mime(req) === 'application/json'
+  if (hasBody(req) && isJson) {
+    var buffers = [];
+    req.on('data', function (chunk) {
+      buffers.push(chunk);
+    });
+    req.on('end', function () {
+      let requestBody = Buffer.concat(buffers).toString();
+      try {
+        requestBody = JSON.parse(requestBody);
+        
+        
+          
+          var env = requestBody.env;
+          var query = requestBody.query;
+
+
+          that.getAccessToken().then(function (data) {
+            var requestData =  {
+              "env": env,
+              "query": query,
+            }
+
+            var url = util.format(that.apiURL.databaseQuery, that.apiDomain, data);
+            axios.post(url, requestData).then(function(r) {
+              console.log(r.data);
+              res.send(r.data)
+            }, function(err) {
+              console.log(err);
+              res.send(err)
+            })
+          }, function(err) {
+            console.log(err);
+            res.send(err)
+          });
+
+
+      } catch (error) {
+        console.log(error)
+      }
+    });
+  }
 }
 
 //暴露可供外部访问的接口
